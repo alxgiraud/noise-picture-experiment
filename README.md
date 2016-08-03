@@ -1,6 +1,4 @@
-## Noise Picture Experiment
-
-https://noise-picture-experiment.herokuapp.com/
+# Noise Picture Experiment
 
 ![screenshot demo](https://raw.githubusercontent.com/alxgiraud/noise-picture-experiment/master/img/screenshot.jpg "screenshot")
 
@@ -31,3 +29,7 @@ The noise seed is randomly picked. You can use the *Refresh Noise* button to get
 
 The fps may vary based on your browser because of the `requestAnimationFrame` method. 
 In case of performance issue try to limit the use of octaves.
+
+## Demo
+
+**https://noise-picture-experiment.herokuapp.com/**
