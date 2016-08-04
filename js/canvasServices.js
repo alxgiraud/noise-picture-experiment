@@ -94,7 +94,7 @@ var canvasServices = (function () {
             var img = new Image();
 
             img.crossOrigin = 'Anonymous';
-            img.src = 'img/' + imgName + '.jpg';
+            img.src = './img/' + imgName + '.jpg';
 
             img.onload = function () {
                 var divWidth = document.getElementById('canvasContainer').offsetWidth - 30,
