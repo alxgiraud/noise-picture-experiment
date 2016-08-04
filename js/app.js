@@ -13,7 +13,8 @@
             lacunarity: 1.5
         },
 
-        resizeFpsContainer = function (width) {
+        callbackCreateImage = function (width) {
+            vm.isLoading = false;
             document.getElementById('fps-container').style.width = width + 'px';
         },
 
@@ -40,11 +41,13 @@
             },
             data: {
                 fps: 0,
+                isLoading: false,
                 hasHueVariation: false
             },
             methods: {
                 onSelectImage: function () {
-                    canvasServices.createImage(this.imgName, this.imgSize, resizeFpsContainer);
+                    this.isLoading = true;
+                    canvasServices.createImage(this.imgName, this.imgSize, callbackCreateImage);
                 },
                 onSelectMode: function () {
                     canvasServices.updateMode(this.mode);
@@ -73,7 +76,7 @@
     noiseServices.createNoise(Math.random());
     noiseServices.setParameters(defaultNoiseParameters);
 
-    canvasServices.createImage(defaultImgName, defaultImgSize, resizeFpsContainer);
+    canvasServices.createImage(defaultImgName, defaultImgSize, callbackCreateImage);
     canvasServices.updateSpeed(defaultSpeed);
     canvasServices.updateIntensity(defaultIntensity);
     canvasServices.run();

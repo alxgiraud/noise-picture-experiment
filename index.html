@@ -24,7 +24,10 @@
             <div class="col-sm-6" id="canvasContainer">
                 <canvas id="mainCanvas"></canvas>
                 <p class="text-muted" id="fps-container">
-                    <small>{{ Math.round(fps) }} fps</small>
+                    <small>
+                        <span v-show="isLoading">Loading...</span>
+                        <span class="pull-right">{{ Math.round(fps) }} fps</span>
+                    </small>
                 </p>
             </div>
             <div class="col-sm-6">
