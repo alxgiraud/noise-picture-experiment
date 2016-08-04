@@ -26,9 +26,19 @@ The noise seed is randomly picked. You can use the *Refresh Noise* button to get
 | Frequency   	| Increase or decrease the number of cycles per unit length              	|
 | Octaves     	| Define the amount of noises that are added together to form final noise 	|
 | Persistence 	| Define how much influence each successive octave have                  	|
+| Lacunarity 	| Define how quickly the frequency increases for each successive octave     |
 
-The fps may vary based on your browser because of the `requestAnimationFrame` method. 
-In case of performance issue try to limit the use of octaves.
+Additional information about Perlin noise and the attributes used can be found at the following urls:
+
+ - http://flafla2.github.io/2014/08/09/perlinnoise.html
+ - http://www.redblobgames.com/articles/noise/introduction.html
+ - http://libnoise.sourceforge.net/glossary/
+
+## Performance
+
+The fps may vary based on your browser. The performance appears to be better on **Mozilla Firefox**.
+
+In case of performance issues use **small-sized images** and try to **limit the use of octaves**.
 
 ## Demo
 

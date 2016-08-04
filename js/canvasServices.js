@@ -4,6 +4,8 @@ var canvasServices = (function () {
 
     var canvas = document.getElementById('mainCanvas'),
         ctx = canvas.getContext('2d'),
+        fps = 0,
+        lastCalledTime,
 
         hasBasePicture = true,
         hasNoise = true,
@@ -13,23 +15,24 @@ var canvasServices = (function () {
         unalteredData = [],
 
         loopIndex = 0,
-        speed = 0.05,
-
-        intensity = 0.7,
+        speed = 0,
+        intensity = 0,
 
         privateMethods = {
             saveUnalteredData: function () {
                 var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 unalteredData = imgData.data;
             },
-
             draw: function () {
+
                 var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height),
                     data = imgData.data,
                     x,
                     y,
                     cell,
                     noiseValue = 0;
+
+                privateMethods.updateFps();
 
                 loopIndex += speed;
 
@@ -48,9 +51,19 @@ var canvasServices = (function () {
                 }
 
                 ctx.putImageData(imgData, 0, 0);
+
                 requestId = window.requestAnimationFrame(privateMethods.draw);
             },
-
+            updateFps: function () {
+                if (!lastCalledTime) {
+                    lastCalledTime = Date.now();
+                    fps = 0;
+                    return;
+                }
+                var delta = (Date.now() - lastCalledTime) / 1000;
+                lastCalledTime = Date.now();
+                fps = 1 / delta;
+            },
             getNewDataCell: function (cell, noiseValue, hueVariation) {
                 var dataCell = 0;
 
@@ -64,7 +77,6 @@ var canvasServices = (function () {
 
                 return dataCell;
             },
-
             getHueVariation: function (index) {
                 if (!hasHueVariation) {
                     return 1;
@@ -74,29 +86,40 @@ var canvasServices = (function () {
         };
 
     return {
-        createImage: function () {
+        createImage: function (imgName, size, callback) {
+            if (typeof size === 'undefined' || parseInt(size, 10) === 0) {
+                size = 9999999;
+            }
+
             var img = new Image();
 
             img.crossOrigin = 'Anonymous';
-            img.src = 'img/bird.jpg';
+            img.src = 'img/' + imgName + '.jpg';
 
             img.onload = function () {
                 var divWidth = document.getElementById('canvasContainer').offsetWidth - 30,
-                    width = (img.width > divWidth) ? divWidth : img.width,
+                    width = Math.min(divWidth, img.width, size),
                     height = img.height * width / img.width;
-                
+
                 canvas.width = width;
                 canvas.height = height;
-                
+
                 ctx.drawImage(img, 0, 0, width, height);
 
                 privateMethods.saveUnalteredData();
+
+                if (callback) {
+                    callback(width);
+                }
             };
         },
         run: function () {
             if (requestId === 0) {
                 requestId = window.requestAnimationFrame(privateMethods.draw);
             }
+        },
+        getFps: function () {
+            return fps;
         },
         updateModes: function (newHasBasePicture, newHasNoise, newHasHueVariation) {
             hasBasePicture = newHasBasePicture;

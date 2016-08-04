@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-control" content="no-cache">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Noise Experiment</title>
@@ -13,84 +14,123 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/range.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <script type="text/javascript" src="js/lib/vue.min.js"></script>
 </head>
 
-<body>
-
+<body onload="parametersForm.reset();">
     <div class="container" id="app">
         <div class="row">
             <div class="col-sm-6" id="canvasContainer">
                 <canvas id="mainCanvas"></canvas>
+                <p class="text-muted" id="fps-container">
+                    <small>{{ Math.round(fps) }} fps</small>
+                </p>
             </div>
             <div class="col-sm-6">
+                <form id="parametersForm">
 
-                <div class="form-group">
-                    <label>Layers</label>
-                    <br/>
-                    <input type="checkbox" v-model="hasBasePicture" v-on:change="onCheckMode"> Base Picture
-                    <br />
-                    <input type="checkbox" v-model="hasNoise" v-on:change="onCheckMode"> Noise
-                    <br />
-                    <input type="checkbox" v-model="hasHueVariation" v-on:change="onCheckMode"> Hue variation
-                </div>
-
-                <div class="form-group">
-                    <label>Algorithm</label>
-                    <br />
-                    <input type="radio" name="algorithm" value="perlin" v-model="algorithm" v-on:change="onSelectAlgorithm"> Perlin
-                    <br />
-                    <input type="radio" name="algorithm" value="simplex" v-model="algorithm" v-on:change="onSelectAlgorithm"> Simplex
-                </div>
-
-                <div class="form-range">
-                    <label>Speed</label>
-                    <div class="row">
-                        <div class="col-xs-9">
-                            <input type="range" class="range" min=0 max=0.3 step="0.01" v-model="speed" v-on:input="onSlideSpeed">
-                        </div>
-                        <div class="col-xs-3">{{ Math.round(speed * 100) }}</div>
+                    <div class="form-group">
+                        <select v-model="imgName" v-on:change="onSelectImage">
+                            <option selected>Bird</option>
+                            <option>Einstein</option>
+                            <option>Mountain</option>
+                            <option>Forest</option>
+                            <option>Sea</option>
+                            <option>Lion</option>
+                        </select>
                     </div>
-                </div>
 
-                <div class="form-range">
-                    <label>Intensity</label>
-                    <div class="row">
-                        <div class="col-xs-9">
-                            <input type="range" class="range" min=0 max=2 step="0.01" v-model="intensity" v-on:input="onSlideIntensity">
-                        </div>
-                        <div class="col-xs-3">{{ Math.round(intensity * 100) }}</div>
-                    </div>
-                </div>
+                    <div class="form-group">
+                        <label>Image Size</label>
+                        <br />
+                        <input type="radio" value=200 name="size" v-model="imgSize" v-on:change="onSelectImage"> Small
+                        <br />
+                        <input type="radio" value=250 name="size" v-model="imgSize" v-on:change="onSelectImage" checked> Medium
+                        <br />
+                        <input type="radio" value=350 name="size" v-model="imgSize" v-on:change="onSelectImage"> Large
+                        <br />
+                        <input type="radio" value=0 name="size" v-model="imgSize" v-on:change="onSelectImage"> Original
 
-                <div class="form-range">
-                    <label>Frequency</label>
-                    <div class="row">
-                        <div class="col-xs-9">
-                            <input type="range" class="range" min=0 max=0.2 step="0.001" v-model="noiseParameters.frequency" v-on:input="onSlide">
-                        </div>
-                        <div class="col-xs-3">{{ noiseParameters.frequency }}</div>
                     </div>
-                </div>
 
-                <div class="form-range">
-                    <label>Octaves</label>
-                    <div class="row">
-                        <div class="col-xs-9">
-                            <input type="range" class="range" min=0 max=5 step="1" v-model="noiseParameters.octaves" v-on:input="onSlide">
-                        </div>
-                        <div class="col-xs-3">{{ noiseParameters.octaves }}</div>
+                    <div class="form-group">
+                        <label>Layers</label>
+                        <br/>
+                        <input type="checkbox" v-model="hasBasePicture" v-on:change="onCheckMode" checked> Base Picture
+                        <input type="checkbox" v-model="hasNoise" v-on:change="onCheckMode" checked> Noise
+                        <input type="checkbox" v-model="hasHueVariation" v-on:change="onCheckMode"> Hue variation
                     </div>
-                </div>
 
-                <div class="form-range">
-                    <label>Persistence</label>
-                    <div class="row">
-                        <div class="col-xs-9">
-                            <input type="range" class="range" min=0 max=3 step="0.01" v-model="noiseParameters.persistence" v-on:input="onSlide">
-                        </div>
-                        <div class="col-xs-3">{{ noiseParameters.persistence }}</div>
+                    <div class="form-group">
+                        <label>Algorithm</label>
+                        <br />
+                        <input type="radio" value='perlin' name="algorithm" v-model="algorithm" v-on:change="onSelectAlgorithm" checked> Perlin
+                        <input type="radio" value='simplex' name="algorithm" v-model="algorithm" v-on:change="onSelectAlgorithm"> Simplex
                     </div>
-                </div>
+
+                    <!-- Sliders -->
+                    <div class="form-range">
+                        <label>Speed</label>
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <input type="range" class="range" min=0 max=0.3 step=0.01 value=0.05 v-model="speed" v-on:input="onSlideSpeed" v-on:change="onSlideSpeed">
+                            </div>
+                            <div class="col-xs-3">{{ Math.round(speed * 100) }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-range">
+                        <label>Intensity</label>
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <input type="range" class="range" min=0 max=2 step=0.01 value=0.5 v-model="intensity" v-on:input="onSlideIntensity" v-on:change="onSlideIntensity">
+                            </div>
+                            <div class="col-xs-3">{{ Math.round(intensity * 100) }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-range">
+                        <label>Frequency</label>
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <input type="range" class="range" min=0.1 max=100 value=25 step=0.1 value=25 v-model="noiseParameters.frequency" v-on:input="onSlide">
+                            </div>
+                            <div class="col-xs-3">{{ noiseParameters.frequency }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-range">
+                        <label>Octaves</label>
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <input type="range" class="range" min=0 max=5 step=1 value=2 v-model="noiseParameters.octaves" v-on:input="onSlide">
+                            </div>
+                            <div class="col-xs-3">{{ noiseParameters.octaves }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-range">
+                        <label>Persistence</label>
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <input type="range" class="range" min=0 max=3 step=0.1 value=0.5 v-model="noiseParameters.persistence" v-on:input="onSlide">
+                            </div>
+                            <div class="col-xs-3">{{ noiseParameters.persistence }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-range">
+                        <label>Lacunarity</label>
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <input type="range" class="range" min=1 max=4 step=0.1 value=1.5 v-model="noiseParameters.lacunarity" v-on:input="onSlide">
+                            </div>
+                            <div class="col-xs-3">{{ noiseParameters.lacunarity }}</div>
+                        </div>
+                    </div>
+
+                </form>
 
                 <div class="form-group">
                     <button class="btn" v-on:click="refreshNoise">Refresh noise</button>
@@ -104,7 +144,6 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="js/lib/vue.min.js"></script>
     <script type="text/javascript" src="js/lib/noise.js"></script>
     <script type="text/javascript" src="js/noiseServices.js"></script>
     <script type="text/javascript" src="js/canvasServices.js"></script>

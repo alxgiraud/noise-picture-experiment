@@ -1,24 +1,51 @@
 /*global Vue, canvasServices, noiseServices*/
 (function () {
     'use strict';
-    var defaultNoiseParameters = {
+    var defaultImgName = 'Bird',
+        defaultImgSize = 250,
+        defaultSpeed = 0.05,
+        defaultIntensity = 0.5,
+
+        defaultNoiseParameters = {
             octaves: 2,
-            frequency: 0.025,
-            persistence: 0.5
+            frequency: 25,
+            persistence: 0.5,
+            lacunarity: 1.5
         },
 
-        app = new Vue({
+        resizeFpsContainer = function (width) {
+            document.getElementById('fps-container').style.width = width + 'px';
+        },
+
+        vm = new Vue({
             el: '#app',
+            ready: function () {
+                var self = this;
+
+                self.$data.speed = defaultSpeed;
+                self.$data.fps = 0;
+                self.$data.imgName = defaultImgName;
+                self.$data.imgSize = defaultImgSize;
+                self.$data.hasBasePicture = true;
+                self.$data.hasNoise = true;
+                self.$data.hasHueVariation = false;
+                self.$data.algorithm = 'perlin';
+                self.$data.noiseParameters = defaultNoiseParameters;
+                self.$data.speed = defaultSpeed;
+                self.$data.intensity = defaultIntensity;
+
+                setInterval(function () {
+                    self.$data.fps = canvasServices.getFps();
+                }, 500);
+            },
             data: {
-                hasBasePicture: true,
-                hasNoise: true,
-                hasHueVariation: false,
-                algorithm: 'perlin',
-                noiseParameters: defaultNoiseParameters,
-                speed: 0.05,
-                intensity: 0.7
+                fps: 0,
+                hasHueVariation: false
             },
             methods: {
+                onSelectImage: function () {
+                    canvasServices.createImage(this.imgName, this.imgSize, resizeFpsContainer);
+                },
                 onSelectMode: function () {
                     canvasServices.updateMode(this.mode);
                 },
@@ -45,8 +72,10 @@
 
     noiseServices.createNoise(Math.random());
     noiseServices.setParameters(defaultNoiseParameters);
-    
-    canvasServices.createImage();
+
+    canvasServices.createImage(defaultImgName, defaultImgSize, resizeFpsContainer);
+    canvasServices.updateSpeed(defaultSpeed);
+    canvasServices.updateIntensity(defaultIntensity);
     canvasServices.run();
 
 }());

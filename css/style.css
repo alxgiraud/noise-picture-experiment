@@ -1,5 +1,24 @@
+[v-cloak] {
+    display: none;
+}
+
 body {
     margin-top: 30px;
+}
+
+#parametersForm {
+    margin-top: 20px;
+}
+
+#mainCanvas {
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+#fps-container {
+    text-align: right;
+    margin: 0 auto;
 }
 
 .row .row {
@@ -7,17 +26,11 @@ body {
 }
 
 .form-range {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .range {
     padding-top: 5px;
-}
-
-#mainCanvas {
-    display: block;
-    margin: 0 auto;
-    margin-top: 30px;
 }
 
 .btn,

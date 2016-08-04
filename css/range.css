@@ -92,3 +92,7 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
     background: #ccc;
 }
+
+input[type=range]::-ms-tooltip {
+    display: none;
+}

@@ -5,17 +5,19 @@ var noiseServices = (function () {
     var parameters = {
             octaves: 0,
             frequency: 0,
-            persistence: 0
+            persistence: 0,
+            lacunarity: 0
         },
         algorithm = 'perlin';
+
 
     return {
         createNoise: function (seed) {
             noise.seed(seed);
         },
 
-        updateAlgorithm: function (newAlgorithm) {
-            algorithm = newAlgorithm;
+        updateAlgorithm: function (newAlgo) {
+            algorithm = newAlgo;
         },
 
         getNoiseValue: function (x, y, z) {
@@ -24,15 +26,15 @@ var noiseServices = (function () {
                 amplitude = 1,
                 maxValue = 0,
                 frequency = parameters.frequency;
-
+            
             for (octave = 0; octave <= parameters.octaves; octave += 1) {
                 total += (algorithm === 'perlin') ?
-                        noise.perlin3(x * frequency, y * frequency, z) * amplitude :
-                        noise.simplex3(x * frequency, y * frequency, z) * amplitude;
+                        noise.perlin3(x / frequency, y / frequency, z) * amplitude :
+                        noise.simplex3(x / frequency, y / frequency, z) * amplitude;
 
                 maxValue += amplitude;
                 amplitude *= parameters.persistence;
-                frequency *= 2;
+                frequency *= parameters.lacunarity;
             }
 
             return total / maxValue;
