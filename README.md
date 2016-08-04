@@ -2,6 +2,7 @@
 
 ![screenshot demo](https://raw.githubusercontent.com/alxgiraud/noise-picture-experiment/master/img/screenshot.jpg "screenshot")
 
+#### https://noise-picture-experiment.herokuapp.com/
 
 ## Repositories used
 
@@ -25,7 +26,7 @@ The noise seed is randomly picked. You can use the *Refresh Noise* button to get
 | Intensity   	| Set the noise less or more visible                                     	|
 | Frequency   	| Increase or decrease the number of cycles per unit length              	|
 | Octaves     	| Define the amount of noises that are added together to form final noise 	|
-| Persistence 	| Define how much influence each successive octave have                  	|
+| Persistence 	| Define how much influence each successive octave has                  	|
 | Lacunarity 	| Define how quickly the frequency increases for each successive octave     |
 
 Additional information about Perlin noise and the attributes used can be found at the following urls:
@@ -36,10 +37,6 @@ Additional information about Perlin noise and the attributes used can be found a
 
 ## Performance
 
-The fps may vary based on your browser. The performance appears to be better on **Mozilla Firefox**.
+The frame per second may vary based on your browser. The performance appears to be better on **Mozilla Firefox**.
 
-In case of performance issues use **small-sized images** and try to **limit the use of octaves**.
-
-## Demo
-
-**https://noise-picture-experiment.herokuapp.com/**
+In case of performance issues use small-sized images and try to limit the use of octaves.
