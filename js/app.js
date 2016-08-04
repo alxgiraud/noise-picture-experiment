@@ -7,7 +7,7 @@
         defaultIntensity = 0.5,
 
         defaultNoiseParameters = {
-            octaves: 2,
+            octaves: 1,
             frequency: 25,
             persistence: 0.5,
             lacunarity: 1.5

@@ -19,7 +19,7 @@
 </head>
 
 <body onload="parametersForm.reset();">
-    <div class="container" id="app">
+    <div class="container" id="app" v-cloak>
         <div class="row">
             <div class="col-sm-6" id="canvasContainer">
                 <canvas id="mainCanvas"></canvas>
@@ -107,7 +107,7 @@
                         <label>Octaves</label>
                         <div class="row">
                             <div class="col-xs-9">
-                                <input type="range" class="range" min=0 max=5 step=1 value=2 v-model="noiseParameters.octaves" v-on:input="onSlide">
+                                <input type="range" class="range" min=0 max=5 step=1 value=1 v-model="noiseParameters.octaves" v-on:input="onSlide">
                             </div>
                             <div class="col-xs-3">{{ noiseParameters.octaves }}</div>
                         </div>
